@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/perangkat/{id}/toggle-status', [PerangkatController::class, 'toggleStatus'])->name('perangkat.toggle-status');
     Route::get('/tarif', [TarifController::class, 'index'])->name('tarif.index');
     Route::put('/tarif', [TarifController::class, 'update'])->name('tarif.update');
+    Route::resource('users', UserController::class);
 });
 
 Route::get('/user', [UserController::class, 'index'])->name('user');

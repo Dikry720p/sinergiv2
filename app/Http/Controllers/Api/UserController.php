@@ -32,7 +32,7 @@ class UserController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => ['required', Password::defaults()],
-                'role' => 'required|in:admin,user',
+                'role' => 'required|in:admin,petugas,pemilik',
                 'status' => 'required|in:aktif,nonaktif'
             ]);
 
