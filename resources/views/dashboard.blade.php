@@ -105,10 +105,18 @@
                         <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 md:mb-0">
                             Daftar Perangkat
                         </h2>
-                        <button onclick="bukaModal()"
-                            style="background-color: green; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-                            Tambah Perangkat
-                        </button>
+                        <div class="flex space-x-3">
+                            <button onclick="bukaModal()"
+                                class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-200"
+                                style="background-color:green">
+                                Tambah Perangkat
+                            </button>
+                            <button onclick="bukaModalLaporan()"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200"
+                                style="background-color:  blue">
+                                Download Laporan
+                            </button>
+                        </div>
                     </div>
 
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
@@ -631,5 +639,136 @@
                 alert('Terjadi kesalahan saat memperbarui tarif');
             }
         });
+    </script>
+
+    <!-- Modal Laporan -->
+    <div id="modalLaporan" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-black opacity-50"></div>
+
+            <!-- Modal Content -->
+            <div class="relative bg-white dark:bg-gray-800 rounded-lg w-full max-w-4xl p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                        Laporan Penggunaan Energi - {{ date('F Y') }}
+                    </h3>
+                    <button onclick="tutupModalLaporan()" class="text-gray-400 hover:text-gray-500">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                    Tanggal</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                    Total Perangkat Aktif</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                    Konsumsi (kWh)</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                    Biaya (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="laporanTableBody"
+                            class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                            <!-- Data akan diisi melalui JavaScript -->
+                        </tbody>
+                        <tfoot class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <td colspan="2"
+                                    class="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-300">
+                                    Total:</td>
+                                <td class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100"
+                                    id="totalKonsumsi"></td>
+                                <td class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100"
+                                    id="totalBiaya"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button onclick="tutupModalLaporan()"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                        Tutup
+                    </button>
+                    <button onclick="downloadLaporan()"
+                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
+                        Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tambahkan Script untuk Modal Laporan -->
+    <script>
+        function bukaModalLaporan() {
+            document.getElementById('modalLaporan').classList.remove('hidden');
+            generateLaporanData();
+        }
+
+        function tutupModalLaporan() {
+            document.getElementById('modalLaporan').classList.add('hidden');
+        }
+
+        function generateLaporanData() {
+            const tableBody = document.getElementById('laporanTableBody');
+            tableBody.innerHTML = '';
+
+            let totalKonsumsi = 0;
+            let totalBiaya = 0;
+
+            // Simulasi data untuk satu bulan
+            const currentDate = new Date();
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+                const perangkatAktif = Math.floor(Math.random() * 5) + 1; // Random 1-5 perangkat
+                const konsumsi = (Math.random() * 10).toFixed(2); // Random 0-10 kWh
+                const biaya = (konsumsi * 1445).toFixed(0); // Asumsi tarif Rp 1.445/kWh
+
+                totalKonsumsi += parseFloat(konsumsi);
+                totalBiaya += parseFloat(biaya);
+
+                const row = `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                            ${date.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                            ${perangkatAktif}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                            ${konsumsi}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                            ${new Intl.NumberFormat('id-ID').format(biaya)}
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            }
+
+            document.getElementById('totalKonsumsi').textContent = totalKonsumsi.toFixed(2) + ' kWh';
+            document.getElementById('totalBiaya').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(totalBiaya);
+        }
+
+        function downloadLaporan() {
+            // Simulasi download - dalam implementasi nyata, ini akan memanggil endpoint backend
+            alert(
+                'Laporan sedang diunduh...\n\nDalam implementasi nyata, ini akan menghasilkan file PDF dengan data yang ditampilkan dalam tabel.');
+        }
     </script>
 </x-app-layout>
