@@ -29,6 +29,8 @@ class PerangkatController extends Controller
             $validated = $request->validate([
                 'nama' => 'required|string|max:255',
                 'kategori' => 'required|in:Lampu,AC,Komputer',
+                'tegangan' => 'required|numeric|min:0',
+                'arus' => 'required|numeric|min:0',
                 'daya' => 'required|numeric|min:0',
                 'status' => 'required|in:aktif,nonaktif'
             ]);
@@ -78,7 +80,9 @@ class PerangkatController extends Controller
             $validated = $request->validate([
                 'nama' => 'required|string|max:255',
                 'kategori' => 'required|in:Lampu,AC,Komputer',
-                'daya' => 'required|numeric|min:0',
+                'tegangan' => 'required|numeric|min:0', // update data dari esp32
+                'arus' => 'required|numeric|min:0', // update data dari esp32
+                'daya' => 'required|numeric|min:0', // update data dari esp32
                 'status' => 'required|in:aktif,nonaktif'
             ]);
 

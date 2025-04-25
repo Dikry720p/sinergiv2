@@ -162,7 +162,13 @@
                                 Kategori</th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Daya (Watt)</th>
+                                tegangan (volt)</th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                arus (amp)</>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Daya (Watt)</>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 Status</th>
@@ -191,6 +197,12 @@
                                                         : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300') }}">
                                         {{ $item->kategori }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                    {{ number_format($item->tegangan) }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                    {{ number_format($item->arus) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                     {{ number_format($item->daya) }}
@@ -558,7 +570,6 @@
                                 step="0.01"
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 focus:ring-blue-500">
                         </div>
-
                         <div>
                             <label for="keterangan"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -768,7 +779,8 @@
         function downloadLaporan() {
             // Simulasi download - dalam implementasi nyata, ini akan memanggil endpoint backend
             alert(
-                'Laporan sedang diunduh...\n\nDalam implementasi nyata, ini akan menghasilkan file PDF dengan data yang ditampilkan dalam tabel.');
+                'Laporan sedang diunduh...\n\nDalam implementasi nyata, ini akan menghasilkan file PDF dengan data yang ditampilkan dalam tabel.'
+            );
         }
     </script>
 </x-app-layout>
