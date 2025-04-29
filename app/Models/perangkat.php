@@ -15,6 +15,8 @@ class Perangkat extends Model
     protected $fillable = [
         'nama',
         'kategori',
+        'tegangan',
+        'arus',
         'daya',
         'status',
         'keterangan'
